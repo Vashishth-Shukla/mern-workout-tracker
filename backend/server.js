@@ -1,0 +1,30 @@
+const express = require('express');
+const mongoose = require('mongoose');
+
+// Instantiate express app
+const app = express();
+
+// Add routes
+const workoutRoutes = require('./routes/workouts');
+
+// Middleware
+app.use(express.json()); // Parses incoming requests with JSON payloads
+app.use((req, res, next) => {
+    console.log(req.path, req.method); // Logs the request path and method
+    next();
+});
+
+// Routes
+app.use('/api/workouts', workoutRoutes);
+
+// Connect to DB and start server
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        // Listen to the requests
+        app.listen(process.env.PORT, () => {
+            console.log('Connected to DB and listening on port', process.env.PORT);
+        });
+    })
+    .catch((error) => {
+        console.error('Error connecting to the database:', error);
+    });
