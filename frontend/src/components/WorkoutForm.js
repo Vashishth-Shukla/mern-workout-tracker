@@ -8,6 +8,7 @@ const WorkoutForm = () => {
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
     const [error, setError] = useState(null)
+    const [emptyFields, setEmptyFields] = useState([])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,16 +27,18 @@ const WorkoutForm = () => {
             if (!response.ok) {
                 const json = await response.json();
                 setError(json.error || 'Something went wrong');
+                setEmptyFields(Array.isArray(json.emptyFields) ? json.emptyFields : []);
                 return;
             }
             if (response.ok){
-                 const json = await response.json();
-            setTitle('');
-            setLoad('');
-            setReps('');
-            setError(null);
-            console.log('new workout added : ', json);
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
+                const json = await response.json();
+                setTitle('');
+                setLoad('');
+                setReps('');
+                setError(null);
+                setEmptyFields([])
+                console.log('new workout added : ', json);
+                dispatch({type: 'CREATE_WORKOUT', payload: json})
             }
 
         } catch (error) {
@@ -52,23 +55,30 @@ const WorkoutForm = () => {
             <input 
                 type="text" 
                 // if input changes the value
-                onChange={ (e) => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
                 // if the value is changed from "reset" button
-                value={title}/>
+                value={title}
+                className={emptyFields.includes('title') ? 'error' : ''}
+                />
             <label>Load (in Kg):</label>
             <input
                 type="number"
                 // if input changes the value
                 onChange={(e) => setLoad(e.target.value)}
                 // if the value is changed from "reset" button
-                value={load} />
+                value={load} 
+                className={emptyFields.includes('load') ? 'error' : ''}
+
+                />
             <label>Reps:</label>
             <input
                 type="number"
                 // if input changes the value
                 onChange={(e) => setReps(e.target.value)}
                 // if the value is changed from "reset" button
-                value={reps} />
+                value={reps}
+                className={emptyFields.includes('reps') ? 'error' : ''}
+                />
             
             <button>Add Workout</button>
             {error && <div className="error">{error}</div>}
