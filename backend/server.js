@@ -1,8 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 
 // Instantiate express app
 const app = express();
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Add routes
 const workoutRoutes = require('./routes/workouts');
