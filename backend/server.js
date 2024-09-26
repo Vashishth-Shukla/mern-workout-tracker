@@ -14,6 +14,8 @@ app.use(cors({
 
 // Add routes
 const workoutRoutes = require('./routes/workouts');
+const userRoutes = require('./routes/user');
+
 
 // Middleware
 app.use(express.json()); // Parses incoming requests with JSON payloads
@@ -24,6 +26,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/workouts', workoutRoutes);
+app.use('/api/user', userRoutes);
 
 // Connect to DB and start server
 mongoose.connect(process.env.MONGO_URI)
