@@ -12,6 +12,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
 // Add routes
 const workoutRoutes = require('./routes/workouts');
 const userRoutes = require('./routes/user');
